@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.13
+  build:
+    commands:
+      - echo "Zipping Lambda functions..."
+      - mkdir -p build
+      - zip -j build/validate_order.zip validate_order.py
+      - zip -j build/process_payment.zip process_payment.py
+      - zip -j build/ship_order.zip ship_order.py
+
+  post_build:
+    commands:
+      - echo "Deploying Lambda code..."
+      - aws lambda update-function-code --function-name validate_order --zip-file fileb://build/validate_order.zip
+      - aws lambda update-function-code --function-name process_payment --zip-file fileb://build/process_payment.zip
+      - aws lambda update-function-code --function-name ship_order --zip-file fileb://build/ship_order.zip
