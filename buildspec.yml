@@ -8,9 +8,9 @@ phases:
     commands:
       - echo "Zipping Lambda functions..."
       - mkdir -p build
-      - zip -j build/validate_order.zip validate_order.py
-      - zip -j build/process_payment.zip process_payment.py
-      - zip -j build/ship_order.zip ship_order.py
+      - zip -j build/validate_order.zip lambdas/validate_order.py
+      - zip -j build/process_payment.zip lambdas/process_payment.py
+      - zip -j build/ship_order.zip lambdas/ship_order.py
 
   post_build:
     commands:
@@ -18,20 +18,3 @@ phases:
       - aws lambda update-function-code --function-name validate_order --zip-file fileb://build/validate_order.zip
       - aws lambda update-function-code --function-name process_payment --zip-file fileb://build/process_payment.zip
       - aws lambda update-function-code --function-name ship_order --zip-file fileb://build/ship_order.zip
-version: 0.2
-
-phases:
-  install:
-    runtime-versions:
-      python: 3.9
-  build:
-    commands:
-      - echo "Zipping Lambda functions..."
-      - mkdir -p build
-      - zip -j build/lambda1.zip lambdas/lambda1.py
-      - zip -j build/lambda2.zip lambdas/lambda2.py
-      - zip -j build/lambda3.zip lambdas/lambda3.py
-
-artifacts:
-  files:
-    - build/*.zip
